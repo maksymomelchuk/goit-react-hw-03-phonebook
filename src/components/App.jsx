@@ -4,6 +4,8 @@ import ContactsList from './Contacts/ContactsList';
 import Filter from './Filter/Filter';
 import { ContactForm } from './Phonebook/ContactForm';
 
+const LS_KEY = 'contact_book';
+
 export class App extends Component {
   state = {
     contacts: [],
@@ -35,6 +37,17 @@ export class App extends Component {
     );
     this.setState({ contacts: filteredContacts });
   };
+
+  componentDidMount() {
+    if (localStorage.getItem(LS_KEY)) {
+      const localStorageData = JSON.parse(localStorage.getItem(LS_KEY));
+      this.setState({ contacts: localStorageData });
+    }
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem(LS_KEY, JSON.stringify(this.state.contacts));
+  }
 
   render() {
     const { contacts, filter } = this.state;
